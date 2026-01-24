@@ -12,8 +12,8 @@ export default function AgentationDocs() {
     <>
       <article className="article">
         <header>
-          <h1>Overview</h1>
-          <p className="tagline">Point at problems, not code</p>
+          <h1 style={{ fontSize: '2rem', lineHeight: 1.15, marginBottom: '0.5rem' }}>Point at bugs.<br />Let AI fix them.</h1>
+          <p className="tagline">Agentation turns UI annotations into structured context that AI coding agents can understand and act on. Click any element, add a note, and paste the output into Claude Code, Cursor, or any AI tool.</p>
         </header>
 
         {/* Animated demo */}
