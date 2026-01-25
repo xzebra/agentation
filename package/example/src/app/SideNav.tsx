@@ -378,7 +378,7 @@ export function SideNav() {
     return () => window.removeEventListener('agentation-format-change', handleFormatChange as EventListener);
   }, []);
 
-  const links = [
+  const links: ({ href: string; label: string; badge?: string; items?: { id: string; text: string }[] } | { section: string })[] = [
     { href: "/", label: "Overview" },
     { href: "/install", label: "Install" },
     {
@@ -415,6 +415,7 @@ export function SideNav() {
       ],
     },
     { href: "/output", label: "Output" },
+    { section: "Tools" },
     {
       href: "/mcp",
       label: "MCP",
@@ -438,6 +439,7 @@ export function SideNav() {
     },
     { href: "/api", label: "API" },
     { href: "/webhooks", label: "Webhooks" },
+    { section: "More" },
     { href: "/changelog", label: "Changelog" },
     { href: "/faq", label: "FAQ" },
   ];
@@ -446,7 +448,15 @@ export function SideNav() {
     <nav className="side-nav">
       <TypedLogo isForensic={isForensic && pathname === '/output'} isOverview={pathname === '/'} />
       <div className="nav-links">
-        {links.map((link) => {
+        {links.map((link, index) => {
+          if ('section' in link) {
+            return (
+              <div key={link.section} className="nav-section">
+                {link.section}
+              </div>
+            );
+          }
+
           const isActive = pathname === link.href;
           const hasItems = 'items' in link && link.items && link.items.length > 0;
 
