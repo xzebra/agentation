@@ -2662,7 +2662,7 @@ export function PageFeedbackToolbarCSS({
                 <span
                   className={`${styles.settingsLabel} ${!isDarkMode ? styles.light : ""}`}
                 >
-                  Sync Status
+                  MCP Connection
                   {endpoint && (
                     <span
                       className={styles.helpIcon}
