@@ -36,6 +36,8 @@ import {
   IconMoon,
   IconXmarkLarge,
   IconEdit,
+  IconChevronLeft,
+  IconChevronRight,
 } from "../icons";
 import {
   identifyElement,
@@ -464,6 +466,9 @@ export function PageFeedbackToolbarCSS({
   const [isFrozen, setIsFrozen] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showSettingsVisible, setShowSettingsVisible] = useState(false);
+  const [settingsPage, setSettingsPage] = useState<"main" | "automations">(
+    "main",
+  );
   const [tooltipsHidden, setTooltipsHidden] = useState(false);
 
   // Hide tooltips after button click until mouse leaves
@@ -550,6 +555,8 @@ export function PageFeedbackToolbarCSS({
     } else {
       // Reset tooltips when settings close (fixes tooltips not showing after closing settings)
       setTooltipsHidden(false);
+      // Reset to main page when settings close
+      setSettingsPage("main");
       const timer = setTimeout(() => setShowSettingsVisible(false), 0);
       return () => clearTimeout(timer);
     }
@@ -2441,7 +2448,11 @@ export function PageFeedbackToolbarCSS({
                 : undefined
             }
           >
-            <div className={styles.settingsHeader}>
+            <div className={styles.settingsPanelContainer}>
+              <div
+                className={`${styles.settingsPage} ${settingsPage === "automations" ? styles.slideLeft : ""}`}
+              >
+                <div className={styles.settingsHeader}>
               <span className={styles.settingsBrand}>
                 <span
                   className={styles.settingsBrandSlash}
@@ -2515,8 +2526,7 @@ export function PageFeedbackToolbarCSS({
               </div>
 
               <div
-                className={`${styles.settingsRow} ${!isLocalhost ? styles.settingsRowDisabled : ""}`}
-                style={{ marginTop: 4 }}
+                className={`${styles.settingsRow} ${styles.settingsRowMarginTop} ${!isLocalhost ? styles.settingsRowDisabled : ""}`}
               >
                 <div
                   className={`${styles.settingsLabel} ${!isDarkMode ? styles.light : ""}`}
@@ -2587,166 +2597,6 @@ export function PageFeedbackToolbarCSS({
             </div>
 
             <div className={styles.settingsSection}>
-              <div className={styles.settingsRow}>
-                <div
-                  className={`${styles.settingsLabel} ${!isDarkMode ? styles.light : ""}`}
-                >
-                  Marker Click
-                  <span
-                    className={styles.helpIcon}
-                    data-tooltip="What happens when you click a marker"
-                  >
-                    <IconHelp size={20} />
-                  </span>
-                </div>
-                <button
-                  className={`${styles.cycleButton} ${!isDarkMode ? styles.light : ""}`}
-                  onClick={() => {
-                    const currentIndex = MARKER_CLICK_OPTIONS.findIndex(
-                      (opt) => opt.value === settings.markerClickBehavior,
-                    );
-                    const nextIndex =
-                      (currentIndex + 1) % MARKER_CLICK_OPTIONS.length;
-                    setSettings((s) => ({
-                      ...s,
-                      markerClickBehavior:
-                        MARKER_CLICK_OPTIONS[nextIndex].value,
-                    }));
-                  }}
-                >
-                  <span
-                    key={settings.markerClickBehavior}
-                    className={styles.cycleButtonText}
-                  >
-                    {
-                      MARKER_CLICK_OPTIONS.find(
-                        (opt) => opt.value === settings.markerClickBehavior,
-                      )?.label
-                    }
-                  </span>
-                  <span className={styles.cycleDots}>
-                    {MARKER_CLICK_OPTIONS.map((option) => (
-                      <span
-                        key={option.value}
-                        className={`${styles.cycleDot} ${!isDarkMode ? styles.light : ""} ${settings.markerClickBehavior === option.value ? styles.active : ""}`}
-                      />
-                    ))}
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            <div className={styles.settingsSection}>
-              <div className={styles.settingsRow}>
-                <span
-                  className={`${styles.settingsLabel} ${!isDarkMode ? styles.light : ""}`}
-                >
-                  MCP Connection
-                  {endpoint && (
-                    <span
-                      className={styles.helpIcon}
-                      data-tooltip={
-                        connectionStatus === "connected"
-                          ? `Connected${currentSessionId ? ` (${currentSessionId.slice(0, 8)}...)` : ""}`
-                          : connectionStatus === "connecting"
-                            ? "Connecting..."
-                            : "Not connected. Run: npx agentation-mcp server"
-                      }
-                    >
-                      <IconHelp size={20} />
-                    </span>
-                  )}
-                </span>
-                {endpoint ? (
-                  <div
-                    className={`${styles.mcpStatusDot} ${styles[connectionStatus]}`}
-                    title={
-                      connectionStatus === "connected"
-                        ? "Connected"
-                        : connectionStatus === "connecting"
-                          ? "Connecting..."
-                          : "Disconnected"
-                    }
-                  />
-                ) : (
-                  <a
-                    href="https://agentation.dev/install#mcp-server"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.settingsLink}
-                    style={{ color: "rgba(0,0,0,0.4)", fontSize: "0.75rem" }}
-                  >
-                    Learn more →
-                  </a>
-                )}
-              </div>
-              <div className={styles.settingsRow} style={{ marginTop: 4 }}>
-                <div
-                  className={`${styles.settingsLabel} ${!isDarkMode ? styles.light : ""}`}
-                >
-                  Webhook URL
-                  <span
-                    className={styles.helpIcon}
-                    data-tooltip="URL to receive annotation events (overrides prop)"
-                  >
-                    <IconHelp size={20} />
-                  </span>
-                </div>
-                <input
-                  type="url"
-                  placeholder="https://..."
-                  value={settings.webhookUrl}
-                  onChange={(e) =>
-                    setSettings((s) => ({
-                      ...s,
-                      webhookUrl: e.target.value,
-                    }))
-                  }
-                  style={{
-                    width: 100,
-                    padding: "2px 6px",
-                    border: "none",
-                    borderRadius: 4,
-                    fontFamily: "inherit",
-                    fontSize: "0.8125rem",
-                    fontWeight: 500,
-                    textAlign: "right",
-                    background: "transparent",
-                    color: isDarkMode ? "#fff" : "rgba(0,0,0,0.85)",
-                    outline: "none",
-                  }}
-                />
-              </div>
-
-              <div className={styles.settingsRow} style={{ marginTop: 4 }}>
-                <div
-                  className={`${styles.settingsLabel} ${!isDarkMode ? styles.light : ""}`}
-                >
-                  Auto-Send
-                  <span
-                    className={styles.helpIcon}
-                    data-tooltip="Automatically send annotation events to configured webhook URL"
-                  >
-                    <IconHelp size={20} />
-                  </span>
-                </div>
-                <label className={styles.toggleSwitch}>
-                  <input
-                    type="checkbox"
-                    checked={settings.webhooksEnabled}
-                    onChange={() =>
-                      setSettings((s) => ({
-                        ...s,
-                        webhooksEnabled: !s.webhooksEnabled,
-                      }))
-                    }
-                  />
-                  <span className={styles.toggleSlider} />
-                </label>
-              </div>
-            </div>
-
-            <div className={styles.settingsSection}>
               <label className={styles.settingsToggle}>
                 <input
                   type="checkbox"
@@ -2779,7 +2629,7 @@ export function PageFeedbackToolbarCSS({
                   </span>
                 </span>
               </label>
-              <label className={styles.settingsToggle}>
+              <label className={`${styles.settingsToggle} ${styles.settingsToggleMarginBottom}`}>
                 <input
                   type="checkbox"
                   id="blockInteractions"
@@ -2805,6 +2655,118 @@ export function PageFeedbackToolbarCSS({
                   Block page interactions
                 </span>
               </label>
+            </div>
+
+            <div className={`${styles.settingsSection} ${styles.settingsSectionExtraPadding}`}>
+              <button
+                className={`${styles.settingsNavLink} ${!isDarkMode ? styles.light : ""}`}
+                onClick={() => setSettingsPage("automations")}
+              >
+                <span>Manage MCP & Webhooks</span>
+                <IconChevronRight size={16} />
+              </button>
+            </div>
+              </div>
+
+              {/* Automations Page */}
+              <div
+                className={`${styles.settingsPage} ${styles.automationsPage} ${settingsPage === "automations" ? styles.slideIn : ""}`}
+              >
+                <button
+                  className={`${styles.settingsBackButton} ${!isDarkMode ? styles.light : ""}`}
+                  onClick={() => setSettingsPage("main")}
+                >
+                  <IconChevronLeft size={16} />
+                  <span>Manage MCP & Webhooks</span>
+                </button>
+
+                {/* MCP Connection section */}
+                <div className={styles.settingsSection}>
+                  <div className={styles.settingsRow}>
+                    <span
+                      className={`${styles.automationHeader} ${!isDarkMode ? styles.light : ""}`}
+                    >
+                      MCP Connection
+                    </span>
+                    {endpoint ? (
+                      <div
+                        className={`${styles.mcpStatusDot} ${styles[connectionStatus]}`}
+                        title={
+                          connectionStatus === "connected"
+                            ? "Connected"
+                            : connectionStatus === "connecting"
+                              ? "Connecting..."
+                              : "Disconnected"
+                        }
+                      />
+                    ) : (
+                      <a
+                        href="https://agentation.dev/install#mcp-server"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.settingsLink}
+                      >
+                        Learn more →
+                      </a>
+                    )}
+                  </div>
+                  <p
+                    className={`${styles.automationDescription} ${!isDarkMode ? styles.light : ""}`}
+                  >
+                    MCP connection allows agents to receive and respond to
+                    annotations.
+                  </p>
+                </div>
+
+                {/* Webhooks section */}
+                <div className={`${styles.settingsSection} ${styles.settingsSectionGrow}`}>
+                  <div className={styles.settingsRow}>
+                    <span
+                      className={`${styles.automationHeader} ${!isDarkMode ? styles.light : ""}`}
+                    >
+                      Webhooks
+                    </span>
+                    <div className={styles.autoSendRow}>
+                      <span
+                        className={`${styles.autoSendLabel} ${!isDarkMode ? styles.light : ""} ${settings.webhooksEnabled ? styles.active : ""}`}
+                      >
+                        Auto-Send
+                      </span>
+                      <label className={`${styles.toggleSwitch} ${!settings.webhookUrl ? styles.disabled : ""}`}>
+                        <input
+                          type="checkbox"
+                          checked={settings.webhooksEnabled}
+                          disabled={!settings.webhookUrl}
+                          onChange={() =>
+                            setSettings((s) => ({
+                              ...s,
+                              webhooksEnabled: !s.webhooksEnabled,
+                            }))
+                          }
+                        />
+                        <span className={styles.toggleSlider} />
+                      </label>
+                    </div>
+                  </div>
+                  <p
+                    className={`${styles.automationDescription} ${!isDarkMode ? styles.light : ""}`}
+                  >
+                    Webhooks allow you to receive annotation data at external URLs
+                    when users interact with annotations.
+                  </p>
+                  <textarea
+                    className={`${styles.webhookUrlInput} ${!isDarkMode ? styles.light : ""}`}
+                    placeholder="Webhook URL"
+                    value={settings.webhookUrl}
+                    onChange={(e) =>
+                      setSettings((s) => ({
+                        ...s,
+                        webhookUrl: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
