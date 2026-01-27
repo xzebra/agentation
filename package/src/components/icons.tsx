@@ -702,29 +702,23 @@ export const IconXmarkLarge = ({ size = 24 }: { size?: number }) => (
 
 // Sun icon (light mode)
 export const IconSun = ({ size = 16 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M12 5V3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M12 21V19" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M16.95 7.05L18.36 5.64" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M5.64 18.36L7.05 16.95" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M19 12H21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M3 12H5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M16.95 16.95L18.36 18.36" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M5.64 5.64L7.05 7.05" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
+    <path d="M9.99999 12.7082C11.4958 12.7082 12.7083 11.4956 12.7083 9.99984C12.7083 8.50407 11.4958 7.2915 9.99999 7.2915C8.50422 7.2915 7.29166 8.50407 7.29166 9.99984C7.29166 11.4956 8.50422 12.7082 9.99999 12.7082Z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M10 3.9585V5.05698" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M10 14.9429V16.0414" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M5.7269 5.72656L6.50682 6.50649" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M13.4932 13.4932L14.2731 14.2731" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M3.95834 10H5.05683" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M14.9432 10H16.0417" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M5.7269 14.2731L6.50682 13.4932" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M13.4932 6.50649L14.2731 5.72656" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
 // Moon icon (dark mode)
 export const IconMoon = ({ size = 16 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <path
-      d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
+  <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
+    <path d="M15.5 10.4955C15.4037 11.5379 15.0124 12.5314 14.3721 13.3596C13.7317 14.1878 12.8688 14.8165 11.8841 15.1722C10.8995 15.5278 9.83397 15.5957 8.81217 15.3679C7.79038 15.1401 6.8546 14.6259 6.11434 13.8857C5.37408 13.1454 4.85995 12.2096 4.63211 11.1878C4.40427 10.166 4.47215 9.10048 4.82781 8.11585C5.18346 7.13123 5.81218 6.26825 6.64039 5.62791C7.4686 4.98756 8.46206 4.59634 9.5045 4.5C8.89418 5.32569 8.60049 6.34302 8.67685 7.36695C8.75321 8.39087 9.19454 9.35339 9.92058 10.0794C10.6466 10.8055 11.6091 11.2468 12.6331 11.3231C13.657 11.3995 14.6743 11.1058 15.5 10.4955Z" stroke="currentColor" strokeWidth="1.13793" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
