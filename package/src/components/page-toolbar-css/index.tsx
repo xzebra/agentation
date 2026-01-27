@@ -462,7 +462,9 @@ export function PageFeedbackToolbarCSS({
     reactComponents?: string;
   } | null>(null);
   const [copied, setCopied] = useState(false);
-  const [sendState, setSendState] = useState<"idle" | "sending" | "sent" | "failed">("idle");
+  const [sendState, setSendState] = useState<
+    "idle" | "sending" | "sent" | "failed"
+  >("idle");
   const [cleared, setCleared] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
   const [hoveredMarkerId, setHoveredMarkerId] = useState<string | null>(null);
@@ -493,7 +495,13 @@ export function PageFeedbackToolbarCSS({
   };
 
   // Tooltip component that renders via portal to escape overflow clipping
-  const Tooltip = ({ content, children }: { content: string; children: React.ReactNode }) => {
+  const Tooltip = ({
+    content,
+    children,
+  }: {
+    content: string;
+    children: React.ReactNode;
+  }) => {
     const [isHovering, setIsHovering] = useState(false);
     const [visible, setVisible] = useState(false);
     const [position, setPosition] = useState({ top: 0, right: 0 });
@@ -542,33 +550,34 @@ export function PageFeedbackToolbarCSS({
         >
           {children}
         </span>
-        {isHovering && createPortal(
-          <div
-            style={{
-              position: 'fixed',
-              top: position.top,
-              right: position.right,
-              transform: 'translateY(-50%)',
-              padding: '6px 10px',
-              background: '#383838',
-              color: 'rgba(255, 255, 255, 0.7)',
-              fontSize: '11px',
-              fontWeight: 400,
-              lineHeight: '14px',
-              borderRadius: '10px',
-              width: '180px',
-              textAlign: 'left' as const,
-              zIndex: 100020,
-              pointerEvents: 'none' as const,
-              boxShadow: '0px 1px 8px rgba(0, 0, 0, 0.28)',
-              opacity: visible && !isTransitioning ? 1 : 0,
-              transition: 'opacity 0.15s ease',
-            }}
-          >
-            {content}
-          </div>,
-          document.body
-        )}
+        {isHovering &&
+          createPortal(
+            <div
+              style={{
+                position: "fixed",
+                top: position.top,
+                right: position.right,
+                transform: "translateY(-50%)",
+                padding: "6px 10px",
+                background: "#383838",
+                color: "rgba(255, 255, 255, 0.7)",
+                fontSize: "11px",
+                fontWeight: 400,
+                lineHeight: "14px",
+                borderRadius: "10px",
+                width: "180px",
+                textAlign: "left" as const,
+                zIndex: 100020,
+                pointerEvents: "none" as const,
+                boxShadow: "0px 1px 8px rgba(0, 0, 0, 0.28)",
+                opacity: visible && !isTransitioning ? 1 : 0,
+                transition: "opacity 0.15s ease",
+              }}
+            >
+              {content}
+            </div>,
+            document.body,
+          )}
       </>
     );
   };
@@ -1746,7 +1755,11 @@ export function PageFeedbackToolbarCSS({
 
   // Fire webhook for annotation events - returns true on success, false on failure
   const fireWebhook = useCallback(
-    async (event: string, payload: Record<string, unknown>, force?: boolean): Promise<boolean> => {
+    async (
+      event: string,
+      payload: Record<string, unknown>,
+      force?: boolean,
+    ): Promise<boolean> => {
       // Settings webhookUrl overrides prop
       const targetUrl = settings.webhookUrl || webhookUrl;
       // Skip if no URL, or if webhooks disabled (unless force is true for manual sends)
@@ -2467,10 +2480,20 @@ export function PageFeedbackToolbarCSS({
                   e.stopPropagation();
                   sendToWebhook();
                 }}
-                disabled={!hasAnnotations || (!isValidUrl(settings.webhookUrl) && !isValidUrl(webhookUrl || "")) || sendState === "sending"}
+                disabled={
+                  !hasAnnotations ||
+                  (!isValidUrl(settings.webhookUrl) &&
+                    !isValidUrl(webhookUrl || "")) ||
+                  sendState === "sending"
+                }
                 data-active={sendState === "sent"}
                 data-error={sendState === "failed"}
-                tabIndex={isValidUrl(settings.webhookUrl) || isValidUrl(webhookUrl || "") ? 0 : -1}
+                tabIndex={
+                  isValidUrl(settings.webhookUrl) ||
+                  isValidUrl(webhookUrl || "")
+                    ? 0
+                    : -1
+                }
               >
                 <IconSendArrow size={24} state={sendState} />
                 {hasAnnotations && sendState === "idle" && (
@@ -2484,7 +2507,11 @@ export function PageFeedbackToolbarCSS({
               <span
                 className={`${styles.buttonTooltip} ${sendState === "sent" || sendState === "failed" ? styles.tooltipVisible : ""}`}
               >
-                {sendState === "sent" ? "Sent!" : sendState === "failed" ? "Failed" : "Send to webhook"}
+                {sendState === "sent"
+                  ? "Sent!"
+                  : sendState === "failed"
+                    ? "Failed"
+                    : "Send to webhook"}
               </span>
             </div>
 
@@ -2564,222 +2591,236 @@ export function PageFeedbackToolbarCSS({
                 : undefined
             }
           >
-            <div className={`${styles.settingsPanelContainer} ${isTransitioning ? styles.transitioning : ''}`}>
+            <div
+              className={`${styles.settingsPanelContainer} ${isTransitioning ? styles.transitioning : ""}`}
+            >
               <div
                 className={`${styles.settingsPage} ${settingsPage === "automations" ? styles.slideLeft : ""}`}
               >
                 <div className={styles.settingsHeader}>
-              <span className={styles.settingsBrand}>
-                <span
-                  className={styles.settingsBrandSlash}
-                  style={{
-                    color: settings.annotationColor,
-                    transition: "color 0.2s ease",
-                  }}
-                >
-                  /
-                </span>
-                agentation
-              </span>
-              <span className={styles.settingsVersion}>v{__VERSION__}</span>
-              <button
-                className={styles.themeToggle}
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                title={
-                  isDarkMode ? "Switch to light mode" : "Switch to dark mode"
-                }
-              >
-                {isDarkMode ? <IconSun size={14} /> : <IconMoon size={14} />}
-              </button>
-            </div>
-
-            <div className={styles.settingsSection}>
-              <div className={styles.settingsRow}>
-                <div
-                  className={`${styles.settingsLabel} ${!isDarkMode ? styles.light : ""}`}
-                >
-                  Output Detail
-                  <Tooltip content="Controls how much detail is included in the copied output">
-                    <span className={styles.helpIcon}>
-                      <IconHelp size={20} />
+                  <span className={styles.settingsBrand}>
+                    <span
+                      className={styles.settingsBrandSlash}
+                      style={{
+                        color: settings.annotationColor,
+                        transition: "color 0.2s ease",
+                      }}
+                    >
+                      /
                     </span>
-                  </Tooltip>
-                </div>
-                <button
-                  className={`${styles.cycleButton} ${!isDarkMode ? styles.light : ""}`}
-                  onClick={() => {
-                    const currentIndex = OUTPUT_DETAIL_OPTIONS.findIndex(
-                      (opt) => opt.value === settings.outputDetail,
-                    );
-                    const nextIndex =
-                      (currentIndex + 1) % OUTPUT_DETAIL_OPTIONS.length;
-                    setSettings((s) => ({
-                      ...s,
-                      outputDetail: OUTPUT_DETAIL_OPTIONS[nextIndex].value,
-                    }));
-                  }}
-                >
-                  <span
-                    key={settings.outputDetail}
-                    className={styles.cycleButtonText}
+                    agentation
+                  </span>
+                  <span className={styles.settingsVersion}>v{__VERSION__}</span>
+                  <button
+                    className={styles.themeToggle}
+                    onClick={() => setIsDarkMode(!isDarkMode)}
+                    title={
+                      isDarkMode
+                        ? "Switch to light mode"
+                        : "Switch to dark mode"
+                    }
                   >
-                    {
-                      OUTPUT_DETAIL_OPTIONS.find(
-                        (opt) => opt.value === settings.outputDetail,
-                      )?.label
-                    }
-                  </span>
-                  <span className={styles.cycleDots}>
-                    {OUTPUT_DETAIL_OPTIONS.map((option, i) => (
-                      <span
-                        key={option.value}
-                        className={`${styles.cycleDot} ${!isDarkMode ? styles.light : ""} ${settings.outputDetail === option.value ? styles.active : ""}`}
-                      />
-                    ))}
-                  </span>
-                </button>
-              </div>
-
-              <div
-                className={`${styles.settingsRow} ${styles.settingsRowMarginTop} ${!isLocalhost ? styles.settingsRowDisabled : ""}`}
-              >
-                <div
-                  className={`${styles.settingsLabel} ${!isDarkMode ? styles.light : ""}`}
-                >
-                  React Components
-                  <Tooltip content={
-                    !isLocalhost
-                      ? "Only available on localhost"
-                      : "Include React component names in annotations"
-                  }>
-                    <span className={styles.helpIcon}>
-                      <IconHelp size={20} />
-                    </span>
-                  </Tooltip>
+                    {isDarkMode ? (
+                      <IconSun size={14} />
+                    ) : (
+                      <IconMoon size={14} />
+                    )}
+                  </button>
                 </div>
-                <label
-                  className={`${styles.toggleSwitch} ${!isLocalhost ? styles.disabled : ""}`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={isLocalhost && settings.reactEnabled}
-                    disabled={!isLocalhost}
-                    onChange={() =>
-                      setSettings((s) => ({
-                        ...s,
-                        reactEnabled: !s.reactEnabled,
-                      }))
-                    }
-                  />
-                  <span className={styles.toggleSlider} />
-                </label>
-              </div>
-            </div>
 
-            <div className={styles.settingsSection}>
-              <div
-                className={`${styles.settingsLabel} ${styles.settingsLabelMarker} ${!isDarkMode ? styles.light : ""}`}
-              >
-                Marker Colour
-              </div>
-              <div className={styles.colorOptions}>
-                {COLOR_OPTIONS.map((color) => (
+                <div className={styles.settingsSection}>
+                  <div className={styles.settingsRow}>
+                    <div
+                      className={`${styles.settingsLabel} ${!isDarkMode ? styles.light : ""}`}
+                    >
+                      Output Detail
+                      <Tooltip content="Controls how much detail is included in the copied output">
+                        <span className={styles.helpIcon}>
+                          <IconHelp size={20} />
+                        </span>
+                      </Tooltip>
+                    </div>
+                    <button
+                      className={`${styles.cycleButton} ${!isDarkMode ? styles.light : ""}`}
+                      onClick={() => {
+                        const currentIndex = OUTPUT_DETAIL_OPTIONS.findIndex(
+                          (opt) => opt.value === settings.outputDetail,
+                        );
+                        const nextIndex =
+                          (currentIndex + 1) % OUTPUT_DETAIL_OPTIONS.length;
+                        setSettings((s) => ({
+                          ...s,
+                          outputDetail: OUTPUT_DETAIL_OPTIONS[nextIndex].value,
+                        }));
+                      }}
+                    >
+                      <span
+                        key={settings.outputDetail}
+                        className={styles.cycleButtonText}
+                      >
+                        {
+                          OUTPUT_DETAIL_OPTIONS.find(
+                            (opt) => opt.value === settings.outputDetail,
+                          )?.label
+                        }
+                      </span>
+                      <span className={styles.cycleDots}>
+                        {OUTPUT_DETAIL_OPTIONS.map((option, i) => (
+                          <span
+                            key={option.value}
+                            className={`${styles.cycleDot} ${!isDarkMode ? styles.light : ""} ${settings.outputDetail === option.value ? styles.active : ""}`}
+                          />
+                        ))}
+                      </span>
+                    </button>
+                  </div>
+
                   <div
-                    key={color.value}
-                    role="button"
-                    onClick={() =>
-                      setSettings((s) => ({
-                        ...s,
-                        annotationColor: color.value,
-                      }))
-                    }
-                    style={{
-                      borderColor:
-                        settings.annotationColor === color.value
-                          ? color.value
-                          : "transparent",
-                    }}
-                    className={`${styles.colorOptionRing} ${settings.annotationColor === color.value ? styles.selected : ""}`}
+                    className={`${styles.settingsRow} ${styles.settingsRowMarginTop} ${!isLocalhost ? styles.settingsRowDisabled : ""}`}
                   >
                     <div
-                      className={`${styles.colorOption} ${settings.annotationColor === color.value ? styles.selected : ""}`}
-                      style={{ backgroundColor: color.value }}
-                      title={color.label}
-                    />
+                      className={`${styles.settingsLabel} ${!isDarkMode ? styles.light : ""}`}
+                    >
+                      React Components
+                      <Tooltip
+                        content={
+                          !isLocalhost
+                            ? "Only available on localhost"
+                            : "Include React component names in annotations"
+                        }
+                      >
+                        <span className={styles.helpIcon}>
+                          <IconHelp size={20} />
+                        </span>
+                      </Tooltip>
+                    </div>
+                    <label
+                      className={`${styles.toggleSwitch} ${!isLocalhost ? styles.disabled : ""}`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isLocalhost && settings.reactEnabled}
+                        disabled={!isLocalhost}
+                        onChange={() =>
+                          setSettings((s) => ({
+                            ...s,
+                            reactEnabled: !s.reactEnabled,
+                          }))
+                        }
+                      />
+                      <span className={styles.toggleSlider} />
+                    </label>
                   </div>
-                ))}
-              </div>
-            </div>
+                </div>
 
-            <div className={styles.settingsSection}>
-              <label className={styles.settingsToggle}>
-                <input
-                  type="checkbox"
-                  id="autoClearAfterCopy"
-                  checked={settings.autoClearAfterCopy}
-                  onChange={(e) =>
-                    setSettings((s) => ({
-                      ...s,
-                      autoClearAfterCopy: e.target.checked,
-                    }))
-                  }
-                />
-                <label
-                  className={`${styles.customCheckbox} ${settings.autoClearAfterCopy ? styles.checked : ""}`}
-                  htmlFor="autoClearAfterCopy"
-                >
-                  {settings.autoClearAfterCopy && (
-                    <IconCheckSmallAnimated size={14} />
-                  )}
-                </label>
-                <span
-                  className={`${styles.toggleLabel} ${!isDarkMode ? styles.light : ""}`}
-                >
-                  Clear after output
-                  <Tooltip content="Automatically clear annotations after copying">
-                    <span className={styles.helpIcon}>
-                      <IconHelp size={20} />
+                <div className={styles.settingsSection}>
+                  <div
+                    className={`${styles.settingsLabel} ${styles.settingsLabelMarker} ${!isDarkMode ? styles.light : ""}`}
+                  >
+                    Marker Colour
+                  </div>
+                  <div className={styles.colorOptions}>
+                    {COLOR_OPTIONS.map((color) => (
+                      <div
+                        key={color.value}
+                        role="button"
+                        onClick={() =>
+                          setSettings((s) => ({
+                            ...s,
+                            annotationColor: color.value,
+                          }))
+                        }
+                        style={{
+                          borderColor:
+                            settings.annotationColor === color.value
+                              ? color.value
+                              : "transparent",
+                        }}
+                        className={`${styles.colorOptionRing} ${settings.annotationColor === color.value ? styles.selected : ""}`}
+                      >
+                        <div
+                          className={`${styles.colorOption} ${settings.annotationColor === color.value ? styles.selected : ""}`}
+                          style={{ backgroundColor: color.value }}
+                          title={color.label}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className={styles.settingsSection}>
+                  <label className={styles.settingsToggle}>
+                    <input
+                      type="checkbox"
+                      id="autoClearAfterCopy"
+                      checked={settings.autoClearAfterCopy}
+                      onChange={(e) =>
+                        setSettings((s) => ({
+                          ...s,
+                          autoClearAfterCopy: e.target.checked,
+                        }))
+                      }
+                    />
+                    <label
+                      className={`${styles.customCheckbox} ${settings.autoClearAfterCopy ? styles.checked : ""}`}
+                      htmlFor="autoClearAfterCopy"
+                    >
+                      {settings.autoClearAfterCopy && (
+                        <IconCheckSmallAnimated size={14} />
+                      )}
+                    </label>
+                    <span
+                      className={`${styles.toggleLabel} ${!isDarkMode ? styles.light : ""}`}
+                    >
+                      Clear after output
+                      <Tooltip content="Automatically clear annotations after copying">
+                        <span className={styles.helpIcon}>
+                          <IconHelp size={20} />
+                        </span>
+                      </Tooltip>
                     </span>
-                  </Tooltip>
-                </span>
-              </label>
-              <label className={`${styles.settingsToggle} ${styles.settingsToggleMarginBottom}`}>
-                <input
-                  type="checkbox"
-                  id="blockInteractions"
-                  checked={settings.blockInteractions}
-                  onChange={(e) =>
-                    setSettings((s) => ({
-                      ...s,
-                      blockInteractions: e.target.checked,
-                    }))
-                  }
-                />
-                <label
-                  className={`${styles.customCheckbox} ${settings.blockInteractions ? styles.checked : ""}`}
-                  htmlFor="blockInteractions"
-                >
-                  {settings.blockInteractions && (
-                    <IconCheckSmallAnimated size={14} />
-                  )}
-                </label>
-                <span
-                  className={`${styles.toggleLabel} ${!isDarkMode ? styles.light : ""}`}
-                >
-                  Block page interactions
-                </span>
-              </label>
-            </div>
+                  </label>
+                  <label
+                    className={`${styles.settingsToggle} ${styles.settingsToggleMarginBottom}`}
+                  >
+                    <input
+                      type="checkbox"
+                      id="blockInteractions"
+                      checked={settings.blockInteractions}
+                      onChange={(e) =>
+                        setSettings((s) => ({
+                          ...s,
+                          blockInteractions: e.target.checked,
+                        }))
+                      }
+                    />
+                    <label
+                      className={`${styles.customCheckbox} ${settings.blockInteractions ? styles.checked : ""}`}
+                      htmlFor="blockInteractions"
+                    >
+                      {settings.blockInteractions && (
+                        <IconCheckSmallAnimated size={14} />
+                      )}
+                    </label>
+                    <span
+                      className={`${styles.toggleLabel} ${!isDarkMode ? styles.light : ""}`}
+                    >
+                      Block page interactions
+                    </span>
+                  </label>
+                </div>
 
-            <div className={`${styles.settingsSection} ${styles.settingsSectionExtraPadding}`}>
-              <button
-                className={`${styles.settingsNavLink} ${!isDarkMode ? styles.light : ""}`}
-                onClick={() => setSettingsPage("automations")}
-              >
-                <span>Manage MCP & Webhooks</span>
-                <IconChevronRight size={16} />
-              </button>
-            </div>
+                <div
+                  className={`${styles.settingsSection} ${styles.settingsSectionExtraPadding}`}
+                >
+                  <button
+                    className={`${styles.settingsNavLink} ${!isDarkMode ? styles.light : ""}`}
+                    onClick={() => setSettingsPage("automations")}
+                  >
+                    <span>Manage MCP & Webhooks</span>
+                    <IconChevronRight size={16} />
+                  </button>
+                </div>
               </div>
 
               {/* Automations Page */}
@@ -2827,13 +2868,15 @@ export function PageFeedbackToolbarCSS({
                   <p
                     className={`${styles.automationDescription} ${!isDarkMode ? styles.light : ""}`}
                   >
-                    MCP connection allows agents to receive and respond to
+                    An active MCP connection allows agents to receive and act on
                     annotations.
                   </p>
                 </div>
 
                 {/* Webhooks section */}
-                <div className={`${styles.settingsSection} ${styles.settingsSectionGrow}`}>
+                <div
+                  className={`${styles.settingsSection} ${styles.settingsSectionGrow}`}
+                >
                   <div className={styles.settingsRow}>
                     <span
                       className={`${styles.automationHeader} ${!isDarkMode ? styles.light : ""}`}
@@ -2846,7 +2889,9 @@ export function PageFeedbackToolbarCSS({
                       >
                         Auto-Send
                       </span>
-                      <label className={`${styles.toggleSwitch} ${!settings.webhookUrl ? styles.disabled : ""}`}>
+                      <label
+                        className={`${styles.toggleSwitch} ${!settings.webhookUrl ? styles.disabled : ""}`}
+                      >
                         <input
                           type="checkbox"
                           checked={settings.webhooksEnabled}
@@ -2865,8 +2910,8 @@ export function PageFeedbackToolbarCSS({
                   <p
                     className={`${styles.automationDescription} ${!isDarkMode ? styles.light : ""}`}
                   >
-                    Webhooks allow you to receive annotation data at external URLs
-                    when users interact with annotations.
+                    The webhook URL will receive live annotation changes and
+                    annotation data.
                   </p>
                   <textarea
                     className={`${styles.webhookUrlInput} ${!isDarkMode ? styles.light : ""}`}
